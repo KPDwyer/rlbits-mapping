@@ -1,0 +1,3 @@
+[submodule "rlbits-mapping/Assets/rlbits/plugins/submodule_xNode"]
+	path = rlbits-mapping/Assets/rlbits/plugins/submodule_xNode
+	url = https://github.com/Siccity/xNode.git
