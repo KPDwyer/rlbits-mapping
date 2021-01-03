@@ -60,3 +60,8 @@ This node is used by the runtime scripts to retrieve the state of the graph wher
 <img src="readme-assets/dungeons.png" alt="dungeons" style="zoom:33%;" />
 *A screen cap of the Dungeon graph included in the samples folder. The Dungeon sample generates Shapes & connects them with hallways*
 
+## Plugins
+
+rlbits-mapping uses [xNode](https://github.com/Siccity/xNode), a plugin for making nodegraphs in the editor.
+
+rlbits-mapping uses the C# version of [FastNoise Lite](https://github.com/Auburn/FastNoise), a script that implements several types of noises in a very performant and flexible way.
