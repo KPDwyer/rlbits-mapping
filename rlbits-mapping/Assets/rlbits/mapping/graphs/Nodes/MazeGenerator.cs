@@ -8,8 +8,8 @@ namespace RLBits.Mapping.Graphs
     [NodeTint(0.35f, 0.05f, 0.6f)]
     public class MazeGenerator : PCGNode
     {
-        [Output] public float[] m_result;
-        [Input] public float[] m_map;
+        [Output] public int[] m_result;
+        [Input] public int[] m_map;
         protected Vector2Int m_NoiseParentSize;
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace RLBits.Mapping.Graphs
             {
                 if (m_result != null)
                 {
-                    if (m_result.Length != noiseGraph.TotalCells)
+                    if (m_result.Length != NoiseGraph.TotalCells)
                     {
                         UpdateData();
                     }
@@ -43,19 +43,17 @@ namespace RLBits.Mapping.Graphs
 
         public override void UpdateData(bool withOutputs = true)
         {
-            m_NoiseParentSize = noiseGraph.Size;
-            m_map = GetPort("m_map").GetInputValue<float[]>();
+            m_NoiseParentSize = NoiseGraph.Size;
+            m_map = GetPort("m_map").GetInputValue<int[]>();
 
-            m_result = new float[m_NoiseParentSize.x * m_NoiseParentSize.y];
+            m_result = new int[m_NoiseParentSize.x * m_NoiseParentSize.y];
 
             if (m_map != null && m_map.Length == m_NoiseParentSize.x * m_NoiseParentSize.y)
             {
                 m_map.CopyTo(m_result, 0);
             }
 
-
-
-            Random.InitState(noiseGraph.Seed);
+            Random.InitState(NoiseGraph.Seed);
             m_Neighbours = new List<Vector2Int>();
             m_PassableCells = new List<Vector2Int>();
             Vector2Int StartingPoint = new Vector2Int(Random.Range(1, m_NoiseParentSize.x - 2), Random.Range(1, m_NoiseParentSize.y - 2));
@@ -72,7 +70,7 @@ namespace RLBits.Mapping.Graphs
                 }
                 foreach (Vector2Int vi in m_Neighbours)
                 {
-                    m_result[GridToArray(vi.x, vi.y)] = 0.5f;
+                    m_result[GridToArray(vi.x, vi.y)] = 127;
                 }
             }
             else
@@ -145,7 +143,7 @@ namespace RLBits.Mapping.Graphs
 
         private void FillInDeadEnd(int index)
         {
-            m_result[GridToArray(m_PassableCells[m_DeadEndPassableIndex[index]].x, m_PassableCells[m_DeadEndPassableIndex[index]].y)] = 0.0f;
+            m_result[GridToArray(m_PassableCells[m_DeadEndPassableIndex[index]].x, m_PassableCells[m_DeadEndPassableIndex[index]].y)] = 0;
             m_PassableCells.RemoveAt(m_DeadEndPassableIndex[index]);
 
         }
@@ -154,15 +152,14 @@ namespace RLBits.Mapping.Graphs
         {
             int result = 0;
 
-            if (m_result[GridToArray(cell + Vector2Int.up)] >= 1.0f)
+            if (m_result[GridToArray(cell + Vector2Int.up)] >= 255)
                 result++;
-            if (m_result[GridToArray(cell + Vector2Int.right)] >= 1.0f)
+            if (m_result[GridToArray(cell + Vector2Int.right)] >= 255)
                 result++;
-            if (m_result[GridToArray(cell + Vector2Int.left)] >= 1.0f)
+            if (m_result[GridToArray(cell + Vector2Int.left)] >= 255)
                 result++;
-            if (m_result[GridToArray(cell + Vector2Int.down)] >= 1.0f)
+            if (m_result[GridToArray(cell + Vector2Int.down)] >= 255)
                 result++;
-
 
             return result;
         }
@@ -180,25 +177,25 @@ namespace RLBits.Mapping.Graphs
             Vector2Int occupiedSide = new Vector2Int();
 
             int neighbourCount = 0;
-            if (m_result[GridToArray(target.x, target.y + 1)] == 1.0f)
+            if (m_result[GridToArray(target.x, target.y + 1)] == 255)
             {
                 occupiedSide = new Vector2Int(0, 1);
                 neighbourCount++;
             }
 
-            if (m_result[GridToArray(target.x + 1, target.y)] == 1.0f)
+            if (m_result[GridToArray(target.x + 1, target.y)] == 255)
             {
                 occupiedSide = new Vector2Int(1, 0);
                 neighbourCount++;
             }
 
-            if (m_result[GridToArray(target.x, target.y - 1)] == 1.0f)
+            if (m_result[GridToArray(target.x, target.y - 1)] == 255)
             {
                 occupiedSide = new Vector2Int(0, -1);
                 neighbourCount++;
             }
 
-            if (m_result[GridToArray(target.x - 1, target.y)] == 1.0f)
+            if (m_result[GridToArray(target.x - 1, target.y)] == 255)
             {
                 occupiedSide = new Vector2Int(-1, 0);
                 neighbourCount++;
@@ -223,42 +220,42 @@ namespace RLBits.Mapping.Graphs
                 return false;
             }
 
-            if (m_result[GridToArray(target.x, target.y + 1)] == 1.0f)
+            if (m_result[GridToArray(target.x, target.y + 1)] == 255)
             {
                 return false;
             }
 
-            if (m_result[GridToArray(target.x + 1, target.y + 1)] == 1.0f)
+            if (m_result[GridToArray(target.x + 1, target.y + 1)] == 255)
             {
                 return false;
             }
 
-            if (m_result[GridToArray(target.x + 1, target.y)] == 1.0f)
+            if (m_result[GridToArray(target.x + 1, target.y)] == 255)
             {
                 return false;
             }
-            if (m_result[GridToArray(target.x + 1, target.y - 1)] == 1.0f)
-            {
-                return false;
-            }
-
-            if (m_result[GridToArray(target.x, target.y - 1)] == 1.0f)
+            if (m_result[GridToArray(target.x + 1, target.y - 1)] == 255)
             {
                 return false;
             }
 
-            if (m_result[GridToArray(target.x + 1, target.y - 1)] == 1.0f)
+            if (m_result[GridToArray(target.x, target.y - 1)] == 255)
+            {
+                return false;
+            }
+
+            if (m_result[GridToArray(target.x + 1, target.y - 1)] == 255)
             {
                 return false;
             }
 
 
-            if (m_result[GridToArray(target.x - 1, target.y)] == 1.0f)
+            if (m_result[GridToArray(target.x - 1, target.y)] == 255)
             {
                 return false;
             }
 
-            if (m_result[GridToArray(target.x - 1, target.y - 1)] == 1.0f)
+            if (m_result[GridToArray(target.x - 1, target.y - 1)] == 255)
             {
                 return false;
             }
@@ -272,19 +269,19 @@ namespace RLBits.Mapping.Graphs
             if (addNeighbours)
             {
                 //add this cells applicable neighbours
-                if (m_result[GridToArray(cell.x, cell.y + 1)] == 0.0f)
+                if (m_result[GridToArray(cell.x, cell.y + 1)] == 0)
                 {
                     m_Neighbours.Add(new Vector2Int(cell.x, cell.y + 1));
                 }
-                if (m_result[GridToArray(cell.x, cell.y - 1)] == 0.0f)
+                if (m_result[GridToArray(cell.x, cell.y - 1)] == 0)
                 {
                     m_Neighbours.Add(new Vector2Int(cell.x, cell.y - 1));
                 }
-                if (m_result[GridToArray(cell.x + 1, cell.y)] == 0.0f)
+                if (m_result[GridToArray(cell.x + 1, cell.y)] == 0)
                 {
                     m_Neighbours.Add(new Vector2Int(cell.x + 1, cell.y));
                 }
-                if (m_result[GridToArray(cell.x - 1, cell.y)] == 0.0f)
+                if (m_result[GridToArray(cell.x - 1, cell.y)] == 0)
                 {
                     m_Neighbours.Add(new Vector2Int(cell.x - 1, cell.y));
                 }
@@ -292,7 +289,7 @@ namespace RLBits.Mapping.Graphs
 
             //empty the cell.
             m_PassableCells.Add(cell);
-            m_result[GridToArray(cell.x, cell.y)] = 1.0f;
+            m_result[GridToArray(cell.x, cell.y)] = 255;
         }
     }
 }

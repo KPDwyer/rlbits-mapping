@@ -16,7 +16,7 @@ namespace RLBits.Mapping.Graphs
         {
             if (port.fieldName == "m_result")
             {
-                if (m_result.Length != noiseGraph.TotalCells)
+                if (m_result.Length != NoiseGraph.TotalCells)
                 {
                     UpdateData();
                 }
@@ -27,7 +27,7 @@ namespace RLBits.Mapping.Graphs
 
         public override void UpdateData(bool withOutputs = true)
         {
-            m_NoiseParentSize = noiseGraph.Size;
+            m_NoiseParentSize = NoiseGraph.Size;
 
 
             if (m_result == null || m_result.Length != m_NoiseParentSize.x * m_NoiseParentSize.y)

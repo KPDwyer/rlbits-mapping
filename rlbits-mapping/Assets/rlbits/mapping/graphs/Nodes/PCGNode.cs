@@ -8,21 +8,22 @@ namespace RLBits.Mapping.Graphs
     [CreateNodeMenu("")]
     public class PCGNode : Node
     {
-        [HideInInspector] public PCGNodeGraph noiseGraph;
+        [HideInInspector] public PCGNodeGraph NoiseGraph;
 
         protected override void Init()
         {
-            noiseGraph = graph as PCGNodeGraph;
+            NoiseGraph = graph as PCGNodeGraph;
             base.Init();
         }
 
         protected int GridToArray(int x, int y)
         {
-            return x + (y * noiseGraph.m_MasterNode.Size.x);
+            return x + (y * NoiseGraph.m_MasterNode.Size.x);
         }
+
         protected int GridToArray(Vector2Int gridIndex)
         {
-            return gridIndex.x + (gridIndex.y * noiseGraph.m_MasterNode.Size.x);
+            return gridIndex.x + (gridIndex.y * NoiseGraph.m_MasterNode.Size.x);
         }
 
         public override void OnCreateConnection(NodePort from, NodePort to)
@@ -57,25 +58,25 @@ namespace RLBits.Mapping.Graphs
         /// <param name="np">NodePort to fetch data from</param>
         /// <param name="targetArray">result of casting input to float[]</param>
         /// <returns></returns>
-        protected bool ProcessNodeInput(NodePort np, out float[] targetArray)
+        protected bool ProcessNodeInput(NodePort np, out int[] targetArray)
         {
-            if (np.TryGetInputValue<float[]>(out targetArray))
+            if (np.TryGetInputValue<int[]>(out targetArray))
             {
                 return true;
             }
 
 
-            float inFloat;
-            if (np.TryGetInputValue<float>(out inFloat))
+            int inInt;
+            if (np.TryGetInputValue<int>(out inInt))
             {
-                if (targetArray == null || targetArray.Length != noiseGraph.TotalCells)
+                if (targetArray == null || targetArray.Length != NoiseGraph.TotalCells)
                 {
-                    targetArray = new float[noiseGraph.TotalCells];
+                    targetArray = new int[NoiseGraph.TotalCells];
                 }
 
                 for (int i = 0; i < targetArray.Length; i++)
                 {
-                    targetArray[i] = inFloat;
+                    targetArray[i] = inInt;
                 }
                 return true;
             }

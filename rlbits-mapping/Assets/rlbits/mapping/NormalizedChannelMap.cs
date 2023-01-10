@@ -17,14 +17,14 @@ namespace RLBits.Mapping
         public override void ProcessChannel(RuntimePCG pcg)
         {
             m_channel = pcg.GetChannel(m_ChannelID);
-            BoundsInt bounds = new BoundsInt(0, 0, 0, pcg.m_Size.x, pcg.m_Size.y, 1);
+            BoundsInt bounds = new BoundsInt(0, 0, 0, pcg.GraphSize.x, pcg.GraphSize.y, 1);
 
             TileBase[] tileArray = m_TargetMap.GetTilesBlock(bounds);
-            for (int y = 0; y < pcg.m_Size.y; y++)
+            for (int y = 0; y < pcg.GraphSize.y; y++)
             {
-                for (int x = 0; x < pcg.m_Size.x; x++)
+                for (int x = 0; x < pcg.GraphSize.x; x++)
                 {
-                    tileArray[x + (y * pcg.m_Size.x)] = GetTileForValue(m_channel[x + (y * pcg.m_Size.x)]);
+                    tileArray[x + (y * pcg.GraphSize.x)] = GetTileForValue(m_channel[x + (y * pcg.GraphSize.x)]);
                 }
             }
             m_TargetMap.SetTilesBlock(bounds, tileArray);

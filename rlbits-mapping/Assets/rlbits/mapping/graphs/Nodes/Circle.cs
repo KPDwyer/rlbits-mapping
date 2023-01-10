@@ -9,7 +9,7 @@ namespace RLBits.Mapping.Graphs
     [CreateNodeMenu("Shapes/Circle")]
     public class Circle : PCGNode
     {
-        [Output] public float[] m_result;
+        [Output] public int[] m_result;
 
         protected Vector2Int m_NoiseParentSize;
 
@@ -19,7 +19,7 @@ namespace RLBits.Mapping.Graphs
         {
             if (port.fieldName == "m_result")
             {
-                if (m_result.Length != noiseGraph.TotalCells)
+                if (m_result.Length != NoiseGraph.TotalCells)
                 {
                     UpdateData();
                 }
@@ -32,7 +32,7 @@ namespace RLBits.Mapping.Graphs
         public override void UpdateData(bool withOutputs = true)
         {
 
-            m_NoiseParentSize = noiseGraph.Size;
+            m_NoiseParentSize = NoiseGraph.Size;
 
             Vector2 centre = new Vector2(
                 m_NoiseParentSize.x * 0.5f,
@@ -40,7 +40,7 @@ namespace RLBits.Mapping.Graphs
 
             if (m_result == null || m_result.Length != m_NoiseParentSize.x * m_NoiseParentSize.y)
             {
-                m_result = new float[m_NoiseParentSize.x * m_NoiseParentSize.y];
+                m_result = new int[m_NoiseParentSize.x * m_NoiseParentSize.y];
             }
 
             for (int y = 0; y < m_NoiseParentSize.y; y++)
@@ -48,10 +48,10 @@ namespace RLBits.Mapping.Graphs
                 for (int x = 0; x < m_NoiseParentSize.x; x++)
                 {
                     m_result[x + (y * m_NoiseParentSize.x)] =
-                        1.0f -
-                        (Vector2.Distance(
+                        255 -
+                        Mathf.RoundToInt(Vector2.Distance(
                             new Vector2(x, y),
-                            centre) / (centre.magnitude * 0.7f));
+                            centre) / (centre.magnitude * 0.7f)*255);
                 }
             }
 

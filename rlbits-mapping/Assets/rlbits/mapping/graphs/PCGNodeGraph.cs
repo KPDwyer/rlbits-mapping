@@ -197,14 +197,14 @@ namespace RLBits.Mapping.Graphs
         /// <param name="seed">Seed used to run the graph</param>
         /// <param name="size">size of the output channels</param>
         /// <returns>A Dictionary where key is Channel name, value is a flat float channel. </returns>
-        public Dictionary<string, float[]> GetChannels(int seed, Vector2Int size)
+        public Dictionary<string, int[]> GetChannels(int seed, Vector2Int size)
         {
             CheckMasterNode();
             m_MasterNode.Seed = seed;
             m_MasterNode.Size = size;
             UpdateAll();
             OutputNode outputCache;
-            Dictionary<string, float[]> channelMap = new Dictionary<string, float[]>();
+            Dictionary<string, int[]> channelMap = new Dictionary<string, int[]>();
             foreach (PCGNode pnode in Processed)
             {
                 //TODO KPD have the output nodes set their channel maps when the map is run.

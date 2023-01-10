@@ -12,7 +12,7 @@ namespace RLBits.Mapping.Graphs
     [NodeTint(0.1f, 0.1f, 0.1f)]
     public class PreviewChannelNode : PCGNode
     {
-        [Input] public float[] m_input;
+        [Input] public int[] m_input;
         public bool m_useGradient = false;
         public Gradient m_Gradient;
         public bool m_UpscaleExport;
@@ -40,7 +40,7 @@ namespace RLBits.Mapping.Graphs
         private void GenerateTexture()
         {
             m_noiseParentSize = m_noiseParent.Size;
-            m_input = GetPort("m_input").GetInputValue<float[]>();
+            m_input = GetPort("m_input").GetInputValue<int[]>();
 
             if (m_input == null)
             {
@@ -59,14 +59,14 @@ namespace RLBits.Mapping.Graphs
                     Color c;
                     if (m_useGradient)
                     {
-                        c = m_Gradient.Evaluate(m_input[x + (y * m_noiseParentSize.x)]);
+                        c = m_Gradient.Evaluate((float)m_input[x + (y * m_noiseParentSize.x)]/255.0f);
                     }
                     else
                     {
                         c = Color.Lerp(
                              Color.black,
                              Color.white,
-                             m_input[x + (y * m_noiseParentSize.x)]);
+                             (float)m_input[x + (y * m_noiseParentSize.x)]/255.0f);
                     }
 
                     m_texture.SetPixel(
@@ -85,10 +85,10 @@ namespace RLBits.Mapping.Graphs
             Vector2Int size = new Vector2Int();
             if (m_UpscaleExport)
             {
-                size = noiseGraph.m_MasterNode.Size;
-                noiseGraph.m_MasterNode.Size = new Vector2Int(1024, 1024);
+                size = NoiseGraph.m_MasterNode.Size;
+                NoiseGraph.m_MasterNode.Size = new Vector2Int(1024, 1024);
             }
-            noiseGraph.UpdateAll();
+            NoiseGraph.UpdateAll();
 
             GenerateTexture();
 
@@ -101,8 +101,8 @@ namespace RLBits.Mapping.Graphs
             AssetDatabase.Refresh();
             if (m_UpscaleExport)
             {
-                noiseGraph.m_MasterNode.Size = size;
-                noiseGraph.UpdateAll();
+                NoiseGraph.m_MasterNode.Size = size;
+                NoiseGraph.UpdateAll();
             }
         }
     }

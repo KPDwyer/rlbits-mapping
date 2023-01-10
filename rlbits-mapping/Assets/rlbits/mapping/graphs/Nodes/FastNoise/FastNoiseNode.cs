@@ -25,14 +25,14 @@ namespace RLBits.Mapping.Graphs
         public float m_Lacunarity = 2.0f;
         public float m_Gain = 0.5f;
         [Space]
-        [Output] public float[] m_result;
+        [Output] public int[] m_result;
         protected Vector2Int m_NoiseParentSize;
         protected Vector2 m_offset;
         protected FastNoiseLite fn;
         protected override void Init()
         {
             base.Init();
-            fn = new FastNoiseLite(noiseGraph.Seed);
+            fn = new FastNoiseLite(NoiseGraph.Seed);
         }
 
         public override object GetValue(NodePort port)
@@ -55,8 +55,8 @@ namespace RLBits.Mapping.Graphs
                 Init();
             }
             SetupNoiseType();
-            fn.SetSeed(noiseGraph.Seed);
-            Random.InitState(noiseGraph.Seed);
+            fn.SetSeed(NoiseGraph.Seed);
+            Random.InitState(NoiseGraph.Seed);
             fn.SetFrequency(Random.Range(m_frequencyMin, m_frequencyMax));
             if (m_FractalNoise)
             {
@@ -69,9 +69,9 @@ namespace RLBits.Mapping.Graphs
                 Random.Range(m_OffsetMin.x, m_OffsetMax.x),
                 Random.Range(m_OffsetMin.y, m_OffsetMax.y));
 
-            m_NoiseParentSize = noiseGraph.Size;
+            m_NoiseParentSize = NoiseGraph.Size;
 
-            m_result = new float[m_NoiseParentSize.x * m_NoiseParentSize.y];
+            m_result = new int[m_NoiseParentSize.x * m_NoiseParentSize.y];
 
             float amtx = (1.0f / (float)m_NoiseParentSize.x) * 100;
             float amty = (1.0f / (float)m_NoiseParentSize.y) * 100;
@@ -88,7 +88,7 @@ namespace RLBits.Mapping.Graphs
                     {
                         val = (val * 0.5f) + 0.5f;
                     }
-                    m_result[x + (y * m_NoiseParentSize.x)] = val;
+                    m_result[x + (y * m_NoiseParentSize.x)] = Mathf.RoundToInt(val*255);
                 }
             }
 

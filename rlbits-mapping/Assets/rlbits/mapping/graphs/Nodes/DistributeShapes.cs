@@ -10,7 +10,7 @@ namespace RLBits.Mapping.Graphs
     public class DistributeShapes : PCGNode
     {
         [Output] public List<GridShape> m_Shapes;
-        [Output] public float[] m_result;
+        [Output] public int[] m_result;
 
         public int m_MaxShapeCount;
         public GridShape.Shape m_Shape;
@@ -39,7 +39,7 @@ namespace RLBits.Mapping.Graphs
             {
                 if (m_result != null)
                 {
-                    if (m_result.Length != noiseGraph.TotalCells)
+                    if (m_result.Length != NoiseGraph.TotalCells)
                     {
                         UpdateData();
                     }
@@ -60,18 +60,18 @@ namespace RLBits.Mapping.Graphs
         public override void UpdateData(bool withOutputs = true)
         {
 
-            m_NoiseParentSize = noiseGraph.Size;
+            m_NoiseParentSize = NoiseGraph.Size;
 
             if (m_result == null || m_result.Length != m_NoiseParentSize.x * m_NoiseParentSize.y)
             {
-                m_result = new float[m_NoiseParentSize.x * m_NoiseParentSize.y];
+                m_result = new int[m_NoiseParentSize.x * m_NoiseParentSize.y];
             }
 
             for (int y = 0; y < m_NoiseParentSize.y; y++)
             {
                 for (int x = 0; x < m_NoiseParentSize.x; x++)
                 {
-                    m_result[x + (y * m_NoiseParentSize.x)] = 0.0f;
+                    m_result[x + (y * m_NoiseParentSize.x)] = 0;
                 }
             }
 
@@ -84,7 +84,7 @@ namespace RLBits.Mapping.Graphs
                 foreach (Vector2Int index in indices)
                 {
                     m_result[GridToArray(index)] =
-                        m_Gradation ? (float)(i + 1) / (float)m_Shapes.Count : 1.0f;
+                        m_Gradation ? Mathf.RoundToInt(255*((float)(i + 1) / (float)m_Shapes.Count)) : 255;
 
                 }
             }
@@ -96,7 +96,7 @@ namespace RLBits.Mapping.Graphs
 
         private void SetShapeData()
         {
-            Random.InitState(noiseGraph.m_MasterNode.Seed);
+            Random.InitState(NoiseGraph.m_MasterNode.Seed);
             //may not need this
             m_Area = new int[m_NoiseParentSize.x, m_NoiseParentSize.y];
             m_Shapes = new List<GridShape>();

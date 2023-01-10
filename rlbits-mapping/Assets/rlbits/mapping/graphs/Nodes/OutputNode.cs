@@ -9,7 +9,7 @@ namespace RLBits.Mapping.Graphs
     /// </summary>
     public class OutputNode : PCGNode
     {
-        [Input] public float[] m_Inputs;
+        [Input] public int[] m_input;
         public string Name;
 
         /// <summary>
@@ -17,9 +17,9 @@ namespace RLBits.Mapping.Graphs
         /// a Channel for use.
         /// </summary>
         /// <returns></returns>
-        public float[] GetChannel()
+        public int[] GetChannel()
         {
-            return GetInputValue<float[]>("m_Inputs");
+            return GetInputValue<int[]>("m_input");
         }
     }
 }
