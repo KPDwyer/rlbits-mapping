@@ -9,11 +9,11 @@ namespace RLBits.Mapping.Graphs
     public class StepNode : PCGNode
     {
         [Input(backingValue = ShowBackingValue.Never)] public Node m_Input;
-        [Input] public float Value;
+        [Input] public int Value;
 
-        [Output] public float[] m_Result;
+        [Output] public int[] m_Result;
 
-        private float[] m_A;
+        private int[] m_A;
 
         // Use this for initialization
         protected override void Init()
@@ -38,7 +38,7 @@ namespace RLBits.Mapping.Graphs
                 inputValid = false;
             }
 
-            if (inputValid && m_A.Length != noiseGraph.TotalCells)
+            if (inputValid && m_A.Length != NoiseGraph.TotalCells)
             {
                 Debug.Log("MisMatch");
                 inputValid = false;
@@ -46,10 +46,10 @@ namespace RLBits.Mapping.Graphs
 
             if (inputValid)
             {
-                m_Result = new float[noiseGraph.TotalCells];
+                m_Result = new int[NoiseGraph.TotalCells];
                 for (int i = 0; i < m_Result.Length; i++)
                 {
-                    m_Result[i] = m_A[i] >= Value ? 1.0f : 0.0f;
+                    m_Result[i] = m_A[i] >= Value ? 255 : 0;
                 }
             }
             base.UpdateData(withOutputs);

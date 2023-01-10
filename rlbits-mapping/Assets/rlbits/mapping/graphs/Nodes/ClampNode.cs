@@ -9,15 +9,15 @@ namespace RLBits.Mapping.Graphs
 
     public class ClampNode : PCGNode
     {
-        public float minValue;
-        public float maxValue;
+        public int minValue;
+        public int maxValue;
 
         [Input(backingValue = ShowBackingValue.Never)] public Node m_Input;
 
 
-        [Output] public float[] m_Result;
+        [Output] public int[] m_Result;
 
-        private float[] m_A;
+        private int[] m_A;
 
 
         public override void UpdateData(bool withOutputs = true)
@@ -36,7 +36,7 @@ namespace RLBits.Mapping.Graphs
                 inputValid = false;
             }
 
-            if (m_A.Length != noiseGraph.TotalCells)
+            if (m_A.Length != NoiseGraph.TotalCells)
             {
                 Debug.Log("MisMatch");
                 inputValid = false;
@@ -44,7 +44,7 @@ namespace RLBits.Mapping.Graphs
 
             if (inputValid)
             {
-                m_Result = new float[noiseGraph.TotalCells];
+                m_Result = new int[NoiseGraph.TotalCells];
                 for (int i = 0; i < m_Result.Length; i++)
                 {
                     m_Result[i] = Mathf.Clamp(m_A[i], minValue, maxValue);

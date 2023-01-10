@@ -12,12 +12,12 @@ namespace RLBits.Mapping.Graphs
         [Input(backingValue = ShowBackingValue.Never)] public Node m_AInput;
         [Input(backingValue = ShowBackingValue.Never)] public Node m_BInput;
 
-        [Output] public float[] m_Result;
+        [Output] public int[] m_Result;
 
         public Operation m_operation = Operation.Add;
 
-        private float[] m_A;
-        private float[] m_B;
+        private int[] m_A;
+        private int[] m_B;
 
         public enum Operation
         {
@@ -30,9 +30,7 @@ namespace RLBits.Mapping.Graphs
         protected override void Init()
         {
             base.Init();
-
         }
-
 
         public override void UpdateData(bool withOutputs = true)
         {
@@ -73,7 +71,7 @@ namespace RLBits.Mapping.Graphs
                 inputValid = false;
             }
 
-            if (m_A.Length != noiseGraph.TotalCells)
+            if (m_A.Length != NoiseGraph.TotalCells)
             {
                 Debug.Log("MisMatch");
                 inputValid = false;
@@ -81,7 +79,7 @@ namespace RLBits.Mapping.Graphs
 
             if (inputValid)
             {
-                m_Result = new float[noiseGraph.TotalCells];
+                m_Result = new int[NoiseGraph.TotalCells];
                 for (int i = 0; i < m_Result.Length; i++)
                 {
                     switch (m_operation)

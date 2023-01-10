@@ -12,7 +12,7 @@ namespace RLBits.Mapping
     {
         public string m_ChannelID;
 
-        protected float[] m_channel;
+        protected int[] m_channel;
 
         public abstract void ProcessChannel(RuntimePCG pcg);
     }

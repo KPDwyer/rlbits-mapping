@@ -12,26 +12,26 @@ namespace RLBits.Mapping
     public class RuntimePCG : MonoBehaviour
     {
         [Header("Project References")]
-        public PCGNodeGraph m_Graph;
+        public PCGNodeGraph Graph;
         [Header("Data")]
-        public Vector2Int m_Size = new Vector2Int(128, 128);
-        public int m_Seed = 100;
-        public ChannelMap[] m_ChannelMaps;
-        public bool m_Loop;
+        public Vector2Int GraphSize = new Vector2Int(128, 128);
+        public int Seed = 100;
+        public ChannelMap[] ChannelMaps;
+        public bool Loop;
 
-        private Dictionary<string, float[]> m_channels;
+        private Dictionary<string, int[]> channels;
 
         void Start()
         {
             GenWorld();
-            if (m_Loop)
+            if (Loop)
                 StartCoroutine(LoopGenerations());
         }
 
         private void GenWorld()
         {
-            m_channels = m_Graph.GetChannels(m_Seed, m_Size);
-            foreach (ChannelMap nc in m_ChannelMaps)
+            channels = Graph.GetChannels(Seed, GraphSize);
+            foreach (ChannelMap nc in ChannelMaps)
             {
                 nc.ProcessChannel(this);
             }
@@ -39,10 +39,10 @@ namespace RLBits.Mapping
 
         private IEnumerator LoopGenerations()
         {
-            while (m_Loop)
+            while (Loop)
             {
                 yield return new WaitForSeconds(0.0f);
-                m_Seed++;
+                Seed++;
                 GenWorld();
             }
         }
@@ -52,12 +52,12 @@ namespace RLBits.Mapping
         /// </summary>
         /// <param name="name">name of the channel to retrieve (should match Ouput node)</param>
         /// <returns>a channel as a single-dimension float array</returns>
-        public float[] GetChannel(string name)
+        public int[] GetChannel(string name)
         {
             //TODO KPD string lookups not great
-            if (m_channels.ContainsKey(name))
+            if (channels.ContainsKey(name))
             {
-                return m_channels[name];
+                return channels[name];
             }
             else
             {

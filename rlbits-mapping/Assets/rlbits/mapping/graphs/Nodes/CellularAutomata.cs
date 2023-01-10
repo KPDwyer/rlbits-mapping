@@ -9,12 +9,12 @@ namespace RLBits.Mapping.Graphs
     [NodeTint(0.35f, 0.05f, 0.6f)]
     public class CellularAutomata : PCGNode
     {
-        [Input] public float[] m_input;
+        [Input] public int[] m_input;
         [Input] public int IterationCount = 0;
         [Tooltip("The value a value must be above to be considered `on`")]
-        [Input] public float ThresholdValue = 0.9f;
+        [Input] public int ThresholdValue = 200;
         [Input] public bool UseWrap = false;
-        [Output] public float[] m_actualResult;
+        [Output] public int[] m_actualResult;
 
         [Space]
 
@@ -40,14 +40,9 @@ namespace RLBits.Mapping.Graphs
         //isntead of a list of rules w/ distances.  There may be value in a simple/complex toggle.
         //should see how easy custom node editor is.
 
-
-        [Output] public float[,] m_result;
-
+        [Output] public int[,] m_result;
 
         protected int m_NoiseParentSizeX, m_NoiseParentSizeY;
-
-
-
 
         // Return the correct value of an output port when requested
         public override object GetValue(NodePort port)
@@ -56,7 +51,7 @@ namespace RLBits.Mapping.Graphs
             {
                 if (m_actualResult != null)
                 {
-                    if (m_actualResult.Length != noiseGraph.TotalCells)
+                    if (m_actualResult.Length != NoiseGraph.TotalCells)
                     {
                         UpdateData();
                     }
@@ -68,10 +63,10 @@ namespace RLBits.Mapping.Graphs
 
         public override void UpdateData(bool withOutputs = true)
         {
-            m_NoiseParentSizeX = noiseGraph.Size.x;
-            m_NoiseParentSizeY = noiseGraph.Size.y;
+            m_NoiseParentSizeX = NoiseGraph.Size.x;
+            m_NoiseParentSizeY = NoiseGraph.Size.y;
 
-            m_input = GetPort("m_input").GetInputValue<float[]>();
+            m_input = GetPort("m_input").GetInputValue<int[]>();
 
             if (m_input == null)
             {
@@ -82,7 +77,7 @@ namespace RLBits.Mapping.Graphs
                 return;
             }
 
-            m_result = new float[m_NoiseParentSizeX, m_NoiseParentSizeY];
+            m_result = new int[m_NoiseParentSizeX, m_NoiseParentSizeY];
 
             for (int y = 0; y < m_NoiseParentSizeY; y++)
             {
@@ -95,10 +90,10 @@ namespace RLBits.Mapping.Graphs
 
             //m_input.CopyTo(m_result, 0);
 
-            Random.InitState(noiseGraph.Seed);
+            Random.InitState(NoiseGraph.Seed);
             BeginAutomata();
 
-            m_actualResult = new float[m_NoiseParentSizeX * m_NoiseParentSizeY];
+            m_actualResult = new int[m_NoiseParentSizeX * m_NoiseParentSizeY];
             for (int y = 0; y < m_NoiseParentSizeY; y++)
             {
                 for (int x = 0; x < m_NoiseParentSizeX; x++)
@@ -154,13 +149,13 @@ namespace RLBits.Mapping.Graphs
                         if (state && neighbourCount < NearLessThanCount)
                         {
                             changeHappened = true;
-                            m_result[x, y] = 0.0f;
+                            m_result[x, y] = 0;
                             continue;
                         }
                         if (!state && neighbourCount > NearGreaterThanCount)
                         {
                             changeHappened = true;
-                            m_result[x, y] = 1.0f;
+                            m_result[x, y] = 255;
                             continue;
                         }
                     }
@@ -171,13 +166,13 @@ namespace RLBits.Mapping.Graphs
                         if (state && neighbourCount < MidLessThanCount)
                         {
                             changeHappened = true;
-                            m_result[x, y] = 0.0f;
+                            m_result[x, y] = 0;
                             continue;
                         }
                         if (!state && neighbourCount > MidGreaterThanCount)
                         {
                             changeHappened = true;
-                            m_result[x, y] = 1.0f;
+                            m_result[x, y] = 255;
                             continue;
                         }
                     }
@@ -188,13 +183,13 @@ namespace RLBits.Mapping.Graphs
                         if (state && neighbourCount < FarLessThanCount)
                         {
                             changeHappened = true;
-                            m_result[x, y] = 0.0f;
+                            m_result[x, y] = 0;
                             continue;
                         }
                         if (!state && neighbourCount > FarGreaterThanCount)
                         {
                             changeHappened = true;
-                            m_result[x, y] = 1.0f;
+                            m_result[x, y] = 255;
                             continue;
                         }
                     }

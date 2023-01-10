@@ -17,7 +17,7 @@ namespace RLBits.Mapping.Graphs
 
             if (GUILayout.Button("Update All"))
             {
-                (target as PCGNode).noiseGraph.UpdateAll();
+                (target as PCGNode).NoiseGraph.UpdateAll();
             }
 
             EditorGUI.BeginChangeCheck();

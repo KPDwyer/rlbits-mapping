@@ -12,10 +12,10 @@ namespace RLBits.Mapping.Graphs
         [Input] public List<GridShape> m_Input;
 
         [Output] public List<GridShape> m_Shapes;
-        [Output] public float[] m_result;
+        [Output] public int[] m_result;
 
         public int AdditionalConnectionsToMake;
-        public float MapValue;
+        public int MapValue;
         public HallwayAttach RoomPositionSample;
         public GridShape.Shape HallwayShape;
         public int HallwayMinSize;
@@ -48,7 +48,7 @@ namespace RLBits.Mapping.Graphs
             {
                 if (m_result != null)
                 {
-                    if (m_result.Length != noiseGraph.TotalCells)
+                    if (m_result.Length != NoiseGraph.TotalCells)
                     {
                         UpdateData();
                     }
@@ -67,12 +67,12 @@ namespace RLBits.Mapping.Graphs
 
         public override void UpdateData(bool withOutputs = true)
         {
-            m_NoiseParentSize = noiseGraph.Size;
+            m_NoiseParentSize = NoiseGraph.Size;
             m_Input = GetPort("m_Input").GetInputValue<List<GridShape>>();
 
-            m_result = new float[m_NoiseParentSize.x * m_NoiseParentSize.y];
+            m_result = new int[m_NoiseParentSize.x * m_NoiseParentSize.y];
 
-            Random.InitState(noiseGraph.Seed);
+            Random.InitState(NoiseGraph.Seed);
 
             if (m_Input == null)
             {
